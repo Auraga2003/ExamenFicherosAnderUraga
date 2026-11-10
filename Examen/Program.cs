@@ -7,12 +7,12 @@ namespace ACB
 {
     class Program
     {
-        // Ruta RELATIVA del CSV (el fichero tiene que estar dentro de la carpeta bin)
+        // Ruta RELATIVA 
         static string rutaCsv = "./acb2526.csv";
 
         static void Main(string[] args)
         {
-            // Para que se vean bien las tildes y letras como à, ç, ñ
+            
            
 
             // Leemos el CSV UNA sola vez. La línea 0 es la cabecera, los datos empiezan en la 1
