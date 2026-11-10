@@ -15,7 +15,7 @@ namespace ACB
             
            
 
-            // Leemos el CSV UNA sola vez. La línea 0 es la cabecera, los datos empiezan en la 1
+            // Lectura CSV 
             string[] lineas;
             try
             {
@@ -27,7 +27,7 @@ namespace ACB
                 return;
             }
 
-            // ---------- MENÚ ----------
+            //MENÚ 
             bool salir = false;
             while (!salir)
             {
@@ -58,9 +58,9 @@ namespace ACB
             }
         }
 
-        // ============================================================
+        
         // OPCIÓN 1: resultados de un equipo
-        // ============================================================
+        
         static void VerEquipo(string[] lineas)
         {
             Console.Write("Nombre del equipo: ");
@@ -68,7 +68,6 @@ namespace ACB
 
             List<string> salida = ObtenerPartidosEquipo(lineas, equipo);
 
-            // Si no hay partidos es que el equipo no existe
             if (salida.Count == 0)
             {
                 Console.WriteLine("No se ha encontrado el equipo \"" + equipo + "\". Los equipos son:");
@@ -84,9 +83,9 @@ namespace ACB
             MostrarYGuardar(salida);
         }
 
-        // ============================================================
+        
         // OPCIÓN 2: datos de una jornada
-        // ============================================================
+    
         static void VerJornada(string[] lineas)
         {
             Console.Write("Número de jornada: ");
@@ -95,7 +94,7 @@ namespace ACB
             List<string> salida = new List<string>();
             salida.Add("--- " + jornada + " ---");
 
-            // Recorremos los partidos (empezamos en 1 para saltar la cabecera)
+           
             for (int i = 1; i < lineas.Length; i++)
             {
                 string[] c = lineas[i].Split(',');
@@ -113,12 +112,12 @@ namespace ACB
             MostrarYGuardar(salida);
         }
 
-        // ============================================================
+      
         // OPCIÓN 3: top 3 de MVPs
-        // ============================================================
+        
         static void VerMvps(string[] lineas)
         {
-            // Dos listas "paralelas": en la posición i están el jugador y sus veces como MVP
+            
             List<string> nombres = new List<string>();
             List<int> veces = new List<int>();
 
@@ -130,7 +129,7 @@ namespace ACB
                 int posicion = nombres.IndexOf(mvp);
                 if (posicion == -1)
                 {
-                    // Primera vez que sale este jugador
+                   
                     nombres.Add(mvp);
                     veces.Add(1);
                 }
@@ -143,7 +142,7 @@ namespace ACB
             List<string> salida = new List<string>();
             salida.Add("--- Top 3 MVPs ---");
 
-            // Buscamos el máximo 3 veces
+            
             for (int puesto = 1; puesto <= 3; puesto++)
             {
                 int mejor = 0;
@@ -155,30 +154,26 @@ namespace ACB
 
                 salida.Add(puesto + ". " + nombres[mejor] + " - " + veces[mejor] + " veces");
 
-                // Lo marcamos con -1 para que no vuelva a salir en el siguiente puesto
+                
                 veces[mejor] = -1;
             }
 
             MostrarYGuardar(salida);
         }
 
-        // ============================================================
+        
         // OPCIÓN 4: clasificación
-        // Orden: más victorias primero. DESEMPATE (criterio propio): mayor
-        // diferencia de puntos (puntos a favor - puntos en contra) en toda la temporada.
-        // ============================================================
+        
         static void VerClasificacion(string[] lineas)
         {
             List<string> equipos = ObtenerEquipos(lineas);
 
-            // Listas paralelas: en la posición i están los datos del equipo equipos[i]
             List<int> victorias = new List<int>();
             List<int> derrotas = new List<int>();
             List<int> puntosFavor = new List<int>();
             List<int> puntosContra = new List<int>();
             List<bool> usado = new List<bool>();
 
-            // Todo empieza a 0
             for (int i = 0; i < equipos.Count; i++)
             {
                 victorias.Add(0);
@@ -188,7 +183,7 @@ namespace ACB
                 usado.Add(false);
             }
 
-            // Recorremos todos los partidos y sumamos los datos
+           
             for (int i = 1; i < lineas.Length; i++)
             {
                 string[] c = lineas[i].Split(',');
@@ -219,7 +214,7 @@ namespace ACB
             List<string> salida = new List<string>();
             salida.Add("--- Clasificación ---");
 
-            // En cada puesto buscamos el mejor equipo que aún no hayamos colocado
+            
             for (int puesto = 1; puesto <= equipos.Count; puesto++)
             {
                 int mejor = -1;
@@ -255,9 +250,9 @@ namespace ACB
             MostrarYGuardar(salida);
         }
 
-        // ============================================================
-        // OPCIÓN 5: un fichero .txt por cada equipo (con el nombre del equipo)
-        // ============================================================
+       
+        // OPCIÓN 5: un fichero .txt por cada equipo 
+        
         static void GuardarFicherosEquipos(string[] lineas)
         {
             string carpeta = "./equipos";
@@ -291,11 +286,11 @@ namespace ACB
             }
         }
 
-        // ============================================================
+        
         // FUNCIONES AUXILIARES
-        // ============================================================
+      
 
-        // Devuelve la lista de equipos sin repetir
+      
         static List<string> ObtenerEquipos(string[] lineas)
         {
             List<string> equipos = new List<string>();
@@ -310,8 +305,7 @@ namespace ACB
             return equipos;
         }
 
-        // Devuelve los partidos (ya formateados) en los que juega un equipo,
-        // sea como local o como visitante. No distingue mayúsculas de minúsculas.
+        
         static List<string> ObtenerPartidosEquipo(string[] lineas, string equipo)
         {
             List<string> partidos = new List<string>();
@@ -324,17 +318,14 @@ namespace ACB
             return partidos;
         }
 
-        // Convierte los campos de una línea del CSV en un texto con TODOS los datos
-        // Campos: 0 jornada, 1 local, 2 visitante, 3 resultado, 4 mvp, 5 puntos, 6 asistencias, 7 rebotes, 8 equipo del mvp
-        static string FormatearPartido(string[] c)
+               static string FormatearPartido(string[] c)
         {
             return c[0] + " | " + c[1] + " " + c[3] + " " + c[2]
                 + " | MVP: " + c[4] + " (" + c[8] + ") - "
                 + c[5] + " puntos, " + c[6] + " asistencias, " + c[7] + " rebotes";
         }
 
-        // Muestra el resultado por pantalla y pregunta si se quiere guardar en un .txt
-        // con el nombre que elija el usuario
+       
         static void MostrarYGuardar(List<string> salida)
         {
             Console.WriteLine();
